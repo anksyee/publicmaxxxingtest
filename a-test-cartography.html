@@ -94,6 +94,11 @@
     font-size:clamp(17px,1.5vw,21px);line-height:1.58;color:var(--soft);
   }
   .red{color:var(--red)}
+  .formula{
+    margin:0 0 1.4em;
+    font-family:ui-monospace,'SF Mono','SFMono-Regular',Menlo,Consolas,'Liberation Mono',monospace;
+    font-size:clamp(16px,1.7vw,22px);line-height:1.4;letter-spacing:-.01em;color:var(--ink);
+  }
   .note{
     margin:2.4em 0 0;font-size:10px;
     letter-spacing:.14em;text-transform:uppercase;color:var(--dim);
@@ -130,13 +135,14 @@
 <body>
 
 <div id="progress"><div id="progFill"></div></div>
-<div id="meta"><span>this is a test</span><span id="beatLabel">Beat 01 / 11</span></div>
+<div id="meta"><span>this is a test</span><span id="beatLabel">Beat 01 / 12</span></div>
 <div id="hint">&#8593; &#8595; &#183; space &#8212; beats &#183; scroll to run</div>
 
 <div id="stage" aria-hidden="true">
   <div class="hair"></div>
   <svg id="stageSvg" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid meet">
     <g id="gNet"></g>
+    <g id="gProd"></g>
     <g id="gCloud"></g>
     <g id="gVoid"></g>
     <g id="gOver"></g>
@@ -195,25 +201,31 @@
   </section>
 
   <section class="beat" data-beat="7">
-    <p class="kicker">08 &#183; the field opens</p>
+    <p class="kicker">08 &#183; artist as a product</p>
+    <p class="formula">artist = curator &#215; manager &#215; dealer &#215; archivist</p>
+    <p class="prose">The model treats the artist as one clean object. It isn't. The artist is curator, manager, dealer, and archivist at once &#8212; every role the field pays someone else to do, done by one exhausted node. Categorically that's a product: a single position these four roles factor through. Even the objects aren't atomic. The striation fails here too.</p>
+  </section>
+
+  <section class="beat" data-beat="8">
+    <p class="kicker">09 &#183; the field opens</p>
     <p class="prose">now we leave the closed six-position model and enter the networked one. the work doesn't stop at the public anymore, there's the opening, the Instagram post, the reshares of the post, the resale. work keeps circulating. the field opens</p>
     <p class="note">opening &#183; post &#183; reshare &#183; resale</p>
   </section>
 
-  <section class="beat" data-beat="8">
-    <p class="kicker">09 &#183; saturation &#183; presheaf</p>
+  <section class="beat" data-beat="9">
+    <p class="kicker">10 &#183; saturation &#183; presheaf</p>
     <p class="prose">post &#183; reshare &#183; opening &#183; resale &#8212; four views of one work. sheaf = views that match on overlaps, glued into one. these don't match. add a view &#10230; less resolution. <span class="red">a presheaf that will not glue.</span></p>
     <p class="note">views: 0 &#8594; 30 &#183; conflicts: 0 &#8594; 46 &#183; totalisable: NO</p>
   </section>
 
-  <section class="beat" data-beat="9">
-    <p class="kicker">10 &#183; the void</p>
+  <section class="beat" data-beat="10">
+    <p class="kicker">11 &#183; the void</p>
     <p class="prose">market: terminates at public. network: runs past it. visibility &#10230; more circulation, not an end. so the network adds a new terminal &#8212; the void &#8212; where the over-circulated work empties out. art ends not in its audience but in the nothing after it.</p>
     <p class="note">&#8709; &#183; the void</p>
   </section>
 
-  <section class="beat" data-beat="10">
-    <p class="kicker">11 &#183; play</p>
+  <section class="beat" data-beat="11">
+    <p class="kicker">12 &#183; play</p>
     <p class="prose">now, let's play.</p>
     <p class="note"><a class="link" href="https://anksyee.github.io/publicmaxxxingtest/points-of-view.html" target="_blank" rel="noopener noreferrer">play &#8594; points-of-view.html</a></p>
   </section>
@@ -246,6 +258,7 @@ function el(tag,attrs,parent){
 
 var svg=document.getElementById('stageSvg');
 var gNet=document.getElementById('gNet');
+var gProd=document.getElementById('gProd');
 var gCloud=document.getElementById('gCloud');
 var gVoid=document.getElementById('gVoid');
 var gOver=document.getElementById('gOver');
@@ -301,8 +314,8 @@ for(var pi=0;pi<6;pi++){
       sp:0.4+rnd()*1.0,
       ph:rnd()*6.28,
       label:PLATS[(vi+pi)%4],
-      drainStart:8.02+rnd()*0.45,
-      app:7.02+VIEWS.length*0.017
+      drainStart:9.02+rnd()*0.45,
+      app:8.02+VIEWS.length*0.017
     });
   }
 }
@@ -317,7 +330,7 @@ while(CONFLICTS.length<46&&tries<4000){
   var k=a<b?a+'_'+b:b+'_'+a;
   if(seen[k])continue;
   seen[k]=1;
-  CONFLICTS.push({a:a,b:b,sp:0.7+rnd()*1.6,ph:rnd()*6.28,app:7.1+CONFLICTS.length*0.016,line:null});
+  CONFLICTS.push({a:a,b:b,sp:0.7+rnd()*1.6,ph:rnd()*6.28,app:8.1+CONFLICTS.length*0.016,line:null});
 }
 VIEWS.forEach(function(v){
   var g=el('g',{},gCloud);
@@ -343,6 +356,52 @@ var buds=BUD_DEFS.map(function(bd,i){
   var lab=el('text',{fill:'#9a978f','font-size':8,x:0,y:0},g);
   lab.textContent=bd[2];
   return {g:g,stem:stem,rect:rect,lab:lab,x:bd[0],y:bd[1],ph:i*1.7};
+});
+
+var PROD_ARTIST=[500,300];
+var PROD_ROLES=[
+  {label:'curator',  x:250,y:600},
+  {label:'manager',  x:417,y:600},
+  {label:'dealer',   x:583,y:600},
+  {label:'archivist',x:750,y:600}
+];
+var PROD_GLOSS=[
+  'anything that performs all four is, by definition, an artist \u2014',
+  'the position these roles factor through.'
+];
+var prod={roles:[],arrows:[],gloss:[]};
+var prodArtist=el('g',{opacity:0},gProd);
+el('circle',{cx:PROD_ARTIST[0],cy:PROD_ARTIST[1],r:36,fill:'none',stroke:'#d6d3ca','stroke-width':1.2,opacity:.55},prodArtist);
+el('circle',{cx:PROD_ARTIST[0],cy:PROD_ARTIST[1],r:24,fill:'#141416',stroke:'#efece3','stroke-width':3},prodArtist);
+var prodArtistLab=el('text',{x:PROD_ARTIST[0],y:PROD_ARTIST[1]-54,'text-anchor':'middle','font-size':26,fill:'#e7e4dc'},prodArtist);
+prodArtistLab.textContent='artist';
+PROD_ROLES.forEach(function(r){
+  var g=el('g',{opacity:0},gProd);
+  el('circle',{cx:r.x,cy:r.y,r:18,fill:'#141416',stroke:'#d6d3ca','stroke-width':1.6},g);
+  var lab=el('text',{x:r.x,y:r.y+52,'text-anchor':'middle','font-size':20,fill:'#b9b6ad'},g);
+  lab.textContent=r.label;
+  prod.roles.push({g:g});
+});
+var PROD_SUBS='\u2081\u2082\u2083\u2084';
+PROD_ROLES.forEach(function(r,i){
+  var ax=PROD_ARTIST[0],ay=PROD_ARTIST[1];
+  var dx=r.x-ax,dy=r.y-ay;
+  var L=Math.hypot(dx,dy)||1;
+  var ux=dx/L,uy=dy/L;
+  var sx=ax+ux*38,sy=ay+uy*38;
+  var ex=r.x-ux*24,ey=r.y-uy*24;
+  var g=el('g',{opacity:0},gProd);
+  var path=el('path',{d:'M'+sx+','+sy+' L'+ex+','+ey,fill:'none',stroke:'#c96a64','stroke-width':2.2,'stroke-linecap':'round'},g);
+  var arrow=el('polygon',{points:arrowPts(sx,sy,sx,sy,ex,ey),fill:'#c96a64'},g);
+  var mx=(sx+ex)/2,my=(sy+ey)/2;
+  var lab=el('text',{x:mx-uy*28,y:my+ux*28,'text-anchor':'middle','font-size':15,fill:'#c96a64',opacity:0},g);
+  lab.textContent='\u03c0'+PROD_SUBS.charAt(i);
+  prod.arrows.push({g:g,path:path,arrow:arrow,lab:lab,len:path.getTotalLength()});
+});
+PROD_GLOSS.forEach(function(line,i){
+  var t=el('text',{x:500,y:706+i*28,'text-anchor':'middle','font-size':16,fill:'#6b6963',opacity:0},gProd);
+  t.textContent=line;
+  prod.gloss.push(t);
 });
 
 var titlePt=el('circle',{r:3,fill:'#d6d3ca',cx:500,cy:500,opacity:0},gOver);
@@ -436,7 +495,7 @@ var io=new IntersectionObserver(function(entries){
 beats.forEach(function(b){io.observe(b);});
 
 function jump(i){
-  i=Math.max(0,Math.min(10,i));
+  i=Math.max(0,Math.min(11,i));
   target=i;
   beats[i].scrollIntoView({behavior:REDUCED?'auto':'smooth',block:'start'});
 }
@@ -449,12 +508,12 @@ window.addEventListener('keydown',function(e){
   }else if(k==='Home'){
     e.preventDefault();jump(0);
   }else if(k==='End'){
-    e.preventDefault();jump(10);
+    e.preventDefault();jump(11);
   }
 });
 
 function render(d,t,dt){
-  if(d>7.05&&d<8.06){
+  if(d>8.05&&d<9.06){
     meterAccum=Math.min(meterAccum+dt*0.05,0.97);
     spread=Math.min(spread+dt*4,80);
   }
@@ -462,10 +521,11 @@ function render(d,t,dt){
   var settle=easeOut(clamp01((d-1)/0.9));
   var m5=easeInOut(clamp01((d-3)/1));
   var hl=clamp01((d-4)/0.5);
-  var dim8=clamp01((d-7)/0.4);
+  var dim8=clamp01((d-8)/0.4);
   var g6=clamp01((d-5)/0.9);
+  var artFade=clamp01((d-6)/0.4)*(1-clamp01((d-6.95)/0.35));
   gNet.setAttribute('filter',g6>0.001?('grayscale('+(0.6*g6).toFixed(3)+') saturate('+(1-0.6*g6).toFixed(3)+') brightness('+(1-0.08*g6).toFixed(3)+')'):'none');
-  gNet.setAttribute('opacity',(1-0.62*dim8).toFixed(3));
+  gNet.setAttribute('opacity',((1-0.62*dim8)*(1-0.93*artFade)).toFixed(3));
 
   var wob=REDUCED?0:1;
   var nodePos={},drainP={};
@@ -477,7 +537,7 @@ function render(d,t,dt){
     var y=lerp(P.drift[1]+wy,P.scatter[1],settle);
     x=lerp(x,P.ladder[0],m5);
     y=lerp(y,P.ladder[1],m5);
-    var drain=clamp01((d-(8.15+idx*0.07))/0.4);
+    var drain=clamp01((d-(9.15+idx*0.07))/0.4);
     if(drain>0){x=lerp(x,VOID[0],drain);y=lerp(y,VOID[1],drain);}
     nodePos[k]=[x,y];drainP[k]=drain;
   });
@@ -523,7 +583,7 @@ function render(d,t,dt){
     var isHL=(KEYS[e.a]==='artist'||KEYS[e.b]==='public');
     var op=p;
     op*=isHL?(1-0.25*hl):(1-0.55*hl);
-    op*=(1-clamp01((d-8.3)/0.45));
+    op*=(1-clamp01((d-9.3)/0.45));
     e.g.setAttribute('opacity',op.toFixed(3));
   });
 
@@ -531,21 +591,41 @@ function render(d,t,dt){
   titlePt.setAttribute('opacity',(tp*0.55).toFixed(3));
   titleHalo.setAttribute('opacity',(tp*(0.6+0.4*Math.sin(t*0.8))).toFixed(3));
 
-  var cFade=1-clamp01((d-6.5)/0.5);
+  var cFade=1-clamp01((d-6.1)/0.45);
   var cOp=clamp01((d-2.0)/0.3)*cFade;
   counterTxt.setAttribute('opacity',cOp.toFixed(3));
-  counterSub.setAttribute('opacity',(clamp01((d-2.4)/0.35)*(1-clamp01((d-6.55)/0.5))).toFixed(3));
+  counterSub.setAttribute('opacity',(clamp01((d-2.4)/0.35)*(1-clamp01((d-6.15)/0.45))).toFixed(3));
   var val=Math.min(15,Math.round(7+8*clamp01((d-2.05)/0.9)));
   counterTxt.textContent='|E| = 7 → '+val;
   counterTxt.setAttribute('fill',val>=15?'#c96a64':'#d6d3ca');
 
-  var gFade=1-clamp01((d-6.6)/0.4);
+  var gFade=1-clamp01((d-6.05)/0.4);
   tagInit.setAttribute('opacity',(clamp01((d-4.15)/0.4)*gFade).toFixed(3));
   tagTerm.setAttribute('opacity',(clamp01((d-4.15)/0.4)*gFade).toFixed(3));
   phant.setAttribute('opacity',(clamp01((d-4.1)/0.35)*gFade).toFixed(3));
   verdictTxt.setAttribute('opacity',(clamp01((d-5.2)/0.5)*gFade).toFixed(3));
 
-  var budOp=clamp01((d-6.15)/0.5)*(1-clamp01((d-7.05)/0.35));
+  var artVis=clamp01((d-6.05)/0.35)*(1-clamp01((d-7.02)/0.35));
+  gProd.setAttribute('opacity',artVis.toFixed(3));
+  prodArtist.setAttribute('opacity',clamp01((d-6.1)/0.3).toFixed(3));
+  prod.roles.forEach(function(r,i){
+    r.g.setAttribute('opacity',clamp01((d-(6.2+i*0.12))/0.25).toFixed(3));
+  });
+  prod.arrows.forEach(function(a,i){
+    var p=clamp01((d-(6.25+i*0.13))/0.28);
+    if(p>=1){a.path.setAttribute('stroke-dasharray','none');a.path.setAttribute('stroke-dashoffset','0');}
+    else{
+      a.path.setAttribute('stroke-dasharray',a.len+' '+a.len);
+      a.path.setAttribute('stroke-dashoffset',(a.len*(1-p)).toFixed(1));
+    }
+    a.g.setAttribute('opacity',p.toFixed(3));
+    a.lab.setAttribute('opacity',clamp01((d-(6.4+i*0.13))/0.25).toFixed(3));
+  });
+  prod.gloss.forEach(function(g2,i){
+    g2.setAttribute('opacity',(0.85*clamp01((d-(6.55+i*0.08))/0.35)).toFixed(3));
+  });
+
+  var budOp=clamp01((d-7.15)/0.5)*(1-clamp01((d-8.05)/0.35));
   buds.forEach(function(b){
     var bx=b.x+Math.sin(t*0.5+b.ph)*6*wob;
     var by=b.y+Math.cos(t*0.4+b.ph)*5*wob;
@@ -555,14 +635,14 @@ function render(d,t,dt){
     b.g.setAttribute('opacity',budOp.toFixed(3));
   });
 
-  var mFade=1-clamp01((d-8.3)/0.5);
-  hud.setAttribute('opacity',(clamp01((d-7.1)/0.4)*mFade).toFixed(3));
-  var sOp=Math.max(clamp01((d-7.5)/0.35),clamp01((meterAccum-0.1)/0.15))*mFade;
+  var mFade=1-clamp01((d-9.3)/0.5);
+  hud.setAttribute('opacity',(clamp01((d-8.1)/0.4)*mFade).toFixed(3));
+  var sOp=Math.max(clamp01((d-8.5)/0.35),clamp01((meterAccum-0.1)/0.15))*mFade;
   hudStatus.setAttribute('opacity',sOp.toFixed(3));
   var pw=Math.min(97,meterAccum*100);
   hudBar.setAttribute('width',(pw*1.7).toFixed(1));
   hudPct.textContent=Math.round(pw)+'%';
-  hudCounts.textContent='views '+Math.floor(30*clamp01((d-7.02)/0.55))+' · conflicts '+Math.floor(46*clamp01((d-7.1)/0.6));
+  hudCounts.textContent='views '+Math.floor(30*clamp01((d-8.02)/0.55))+' · conflicts '+Math.floor(46*clamp01((d-8.1)/0.6));
 
   var vpos={};
   VIEWS.forEach(function(v,vi){
@@ -585,22 +665,22 @@ function render(d,t,dt){
   CONFLICTS.forEach(function(c){
     var va=vpos[c.a],vb=vpos[c.b];
     var appear=clamp01((d-c.app)/0.15);
-    var fade=1-clamp01((d-8.05)/0.45);
+    var fade=1-clamp01((d-9.05)/0.45);
     c.line.setAttribute('x1',va.x);c.line.setAttribute('y1',va.y);
     c.line.setAttribute('x2',vb.x);c.line.setAttribute('y2',vb.y);
     var pulse2=REDUCED?0.3:0.22+0.5*(0.5+0.5*Math.sin(t*c.sp+c.ph));
     c.line.setAttribute('opacity',(appear*pulse2*fade).toFixed(3));
   });
 
-  var vOp=clamp01((d-8.03)/0.25);
+  var vOp=clamp01((d-9.03)/0.25);
   voidG.setAttribute('opacity',vOp.toFixed(3));
-  voidArrow.setAttribute('opacity',(clamp01((d-8.12)/0.3)).toFixed(3));
-  var pPlay=clamp01((d-9)/0.6);
+  voidArrow.setAttribute('opacity',(clamp01((d-9.12)/0.3)).toFixed(3));
+  var pPlay=clamp01((d-10)/0.6);
   voidHalo.setAttribute('r',(30+6*Math.sin(t*0.7)*pPlay).toFixed(1));
   voidHalo.setAttribute('opacity',(pPlay>0?(0.35+0.3*Math.sin(t*1.1)):1).toFixed(3));
   voidNode.setAttribute('stroke',pPlay>0.4?'#c96a64':'#3f3e3c');
 
-  var emOp=clamp01((d-9)/0.6);
+  var emOp=clamp01((d-10)/0.6);
   embedWrap.style.opacity=emOp.toFixed(3);
   embedWrap.style.transform='translate(-50%,-50%) scale('+(0.96+0.04*emOp).toFixed(3)+')';
   embedWrap.style.pointerEvents=emOp>0.05?'auto':'none';
@@ -613,8 +693,8 @@ function frame(now){
   display+=(target-display)*(1-Math.exp(-dt*k));
   if(Math.abs(display-target)<0.0005)display=target;
   render(display,now/1000,dt);
-  progFill.style.width=(display/10*100)+'%';
-  beatLabel.textContent='Beat '+String(Math.round(target)+1).padStart(2,'0')+' / 11';
+  progFill.style.width=(display/11*100)+'%';
+  beatLabel.textContent='Beat '+String(Math.round(target)+1).padStart(2,'0')+' / 12';
   requestAnimationFrame(frame);
 }
 render(0,0,0);
